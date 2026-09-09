@@ -4,6 +4,9 @@ public/
 .DS_Store
 draft/
 *.xml
+data/grants.sqlite
+data/grants.sqlite-shm
+data/grants.sqlite-wal
 
 # Beads / Dolt files (added by bd init)
 .dolt/

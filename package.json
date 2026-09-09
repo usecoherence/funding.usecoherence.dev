@@ -7,7 +7,8 @@
     "dev": "eleventy --serve",
     "build": "rm -rf public && eleventy",
     "deploy": "npm run build && node --import ./scripts/load-env.mjs ./scripts/deploy-pgs.mjs",
-    "dns:setup": "node --import ./scripts/load-env.mjs scripts/setup-cloudflare-dns.mjs"
+    "dns:setup": "node --import ./scripts/load-env.mjs scripts/setup-cloudflare-dns.mjs",
+    "db:init": "node --experimental-strip-types scripts/init-db.ts"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2"
