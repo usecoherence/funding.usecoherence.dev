@@ -8,9 +8,22 @@
     "site:build": "npm --prefix website run build",
     "deploy": "npm --prefix website run build && node --import ./deploy/load-env.mjs ./deploy/deploy-pgs.mjs",
     "dns:setup": "node --import ./deploy/load-env.mjs deploy/setup-cloudflare-dns.mjs",
-    "db:init": "node --experimental-strip-types grant/init-db.ts"
+    "db:init": "node --experimental-strip-types grant/init-db.ts",
+    "cli": "tsx grant/cli.ts",
+    "check:types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.2"
+    "@11ty/eleventy": "^3.1.2",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.5.0",
+    "better-sqlite3": "^13.0.3",
+    "commander": "^15.0.0",
+    "drizzle-kit": "^0.31.10",
+    "drizzle-orm": "^0.45.2",
+    "tsx": "^4.23.13",
+    "typescript": "~5.9.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
