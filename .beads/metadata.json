@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "funding_usecoherence_dev",
+  "project_id": "36480571-db0e-4dbc-9f72-160a3de387b6"
+}
