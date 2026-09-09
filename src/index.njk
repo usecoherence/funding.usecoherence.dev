@@ -1,0 +1,64 @@
+---
+layout: layout.njk
+title: Grant Cockpit
+---
+<section class="hero">
+  <div>
+    <p class="eyebrow">LOCAL-FIRST GRANT OPS</p>
+    <h1>Know what needs attention.</h1>
+    <p class="lead">A read-only dashboard generated from SQLite. Change state through <code>grant</code>, then rebuild.</p>
+  </div>
+  <div class="hero-meta">Generated {{ tracker.generatedAt | date }}</div>
+</section>
+
+<section class="metrics" aria-label="Summary">
+  <div class="metric"><span>Total</span><strong>{{ tracker.summary.total }}</strong></div>
+  <div class="metric"><span>P1</span><strong>{{ tracker.summary.p1 }}</strong></div>
+  <div class="metric"><span>In motion</span><strong>{{ tracker.summary.ready }}</strong></div>
+  <div class="metric"><span>Submitted</span><strong>{{ tracker.summary.submitted }}</strong></div>
+  <div class="metric"><span>Changed pages</span><strong>{{ tracker.summary.changed }}</strong></div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Programs</h2>
+    <div class="filters">
+      <button type="button" data-filter="all" class="active">All</button>
+      <button type="button" data-filter="P1">P1</button>
+      <button type="button" data-filter="ready">Ready</button>
+      <button type="button" data-filter="submitted">Submitted</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Priority</th><th>Program</th><th>Fit</th><th>Eligibility</th><th>Status</th><th>Deadline</th><th>Next action</th></tr></thead>
+      <tbody>
+      {% for grant in tracker.items %}
+        {% set application = grant.applications[0] %}
+        <tr data-priority="{{ grant.priority }}" data-status="{{ application.status or 'not-started' }}">
+          <td><span class="badge priority {{ grant.priority | lower }}">{{ grant.priority }}</span></td>
+          <td><a class="program" href="/grants/{{ grant.slug }}/">{{ grant.name }}</a><small>{{ grant.provider }}</small></td>
+          <td><span class="badge {{ grant.fit }}">{{ grant.fit }}</span></td>
+          <td><span class="badge {{ grant.eligibility }}">{{ grant.eligibility }}</span></td>
+          <td>{{ application.status or "not-started" }}</td>
+          <td>{{ application.deadline | date }}</td>
+          <td class="next">{{ grant.next_action or "—" }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  const buttons = document.querySelectorAll('[data-filter]');
+  const rows = document.querySelectorAll('tbody tr');
+  buttons.forEach((button) => button.addEventListener('click', () => {
+    buttons.forEach((item) => item.classList.remove('active'));
+    button.classList.add('active');
+    const filter = button.dataset.filter;
+    rows.forEach((row) => {
+      row.hidden = !(filter === 'all' || row.dataset.priority === filter || row.dataset.status === filter);
+    });
+  }));
+</script>

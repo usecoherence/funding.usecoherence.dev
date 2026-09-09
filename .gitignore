@@ -9,3 +9,6 @@ draft/
 .dolt/
 *.db
 .beads-credential-key
+grant-cockpit/
+target/
+tools/gsc-smoke/target/
