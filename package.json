@@ -14,7 +14,8 @@
     "check:format": "prettier --check grant/",
     "check": "npm run check:types && npm run check:lint && npm run check:format",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx grant/db/migrate.ts"
+    "db:migrate": "tsx grant/db/migrate.ts",
+    "test": "tsx --test grant/tests/*.test.ts"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",

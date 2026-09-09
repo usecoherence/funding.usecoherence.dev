@@ -11,8 +11,7 @@ export function dbPath() {
   return resolve(root, process.env.GRANT_DB_PATH || "data/grants.sqlite");
 }
 
-export function openDb() {
-  const file = dbPath();
+export function openDb(file: string = dbPath()) {
   mkdirSync(dirname(file), { recursive: true });
   const sqlite = new Database(file);
   sqlite.pragma("foreign_keys = ON");
