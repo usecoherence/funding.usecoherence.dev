@@ -9,15 +9,15 @@ test("grant and application round-trip persists", () => {
   const { db, dir } = createTestDb();
   try {
     const grant = addGrant(db, {
-      slug: "openai-codex",
-      name: "OpenAI Codex",
-      programUrl: "https://openai.com/codex",
+      slug: "example-grant",
+      name: "Example Grant Program",
+      programUrl: "https://example.com/grants",
       priority: 1,
       fit: "high",
       eligibility: "eligible",
     });
     assert.ok(grant.id);
-    assert.equal(getGrant(db, grant.id)!.name, "OpenAI Codex");
+    assert.equal(getGrant(db, grant.id)!.name, "Example Grant Program");
     assert.equal(listGrants(db).length, 1);
 
     const application = addApplication(db, {

@@ -21,7 +21,7 @@ test("export returns empty site for empty database", () => {
 test("export returns grants with applications and computed stats", () => {
   const { db, dir } = createTestDb();
   try {
-    const grant = addGrant(db, { slug: "openai-codex", name: "OpenAI Codex" });
+    const grant = addGrant(db, { slug: "example-grant", name: "Example Grant Program" });
     addApplication(db, {
       grantId: grant.id,
       status: "in_discussion",
@@ -30,7 +30,7 @@ test("export returns grants with applications and computed stats", () => {
     });
     const data = exportWebsiteData(db);
     assert.equal(data.grants.length, 1);
-    assert.equal(data.grants[0].slug, "openai-codex");
+    assert.equal(data.grants[0].slug, "example-grant");
     assert.equal(data.grants[0].applications.length, 1);
     assert.equal(data.grants[0].applications[0].status, "in_discussion");
     assert.equal(data.stats.totalInDiscussion, 1);
