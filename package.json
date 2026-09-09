@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "eleventy --serve",
-    "build": "rm -rf public && eleventy",
-    "deploy": "npm run build && node --import ./scripts/load-env.mjs ./scripts/deploy-pgs.mjs",
-    "dns:setup": "node --import ./scripts/load-env.mjs scripts/setup-cloudflare-dns.mjs",
-    "db:init": "node --experimental-strip-types scripts/init-db.ts"
+    "site:dev": "npm --prefix website run dev",
+    "site:build": "npm --prefix website run build",
+    "deploy": "npm --prefix website run build && node --import ./deploy/load-env.mjs ./deploy/deploy-pgs.mjs",
+    "dns:setup": "node --import ./deploy/load-env.mjs deploy/setup-cloudflare-dns.mjs",
+    "db:init": "node --experimental-strip-types grant/init-db.ts"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2"

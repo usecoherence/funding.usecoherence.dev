@@ -15,3 +15,6 @@ data/grants.sqlite-wal
 grant-cockpit/
 target/
 tools/gsc-smoke/target/
+
+# bv (beads viewer) local config and caches
+.bv/

@@ -1,0 +1,13 @@
+{
+  "name": "website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "rm -rf public && eleventy",
+    "palettes": "node scripts/generate-palettes.mjs"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.2"
+  }
+}

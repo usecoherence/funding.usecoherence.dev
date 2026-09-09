@@ -13,8 +13,8 @@ if (!pgsUser) {
   process.exit(1);
 }
 
-if (!existsSync("public")) {
-  console.error("missing public/; run npm run build first");
+if (!existsSync("website/public")) {
+  console.error("missing website/public/; run npm run site:build first");
   process.exit(1);
 }
 
@@ -30,7 +30,7 @@ const result = spawnSync(
     "-rv",
     "-e",
     sshParts.join(" "),
-    "public/",
+    "website/public/",
     `${pgsUser}@${pgsHost}:/${pgsProject}/`,
   ],
   { stdio: "inherit" },

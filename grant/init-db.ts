@@ -12,7 +12,7 @@ mkdirSync(dirname(dbFile), { recursive: true });
 const db = new DatabaseSync(dbFile);
 try {
   db.exec("PRAGMA foreign_keys = ON;");
-  db.exec(readFileSync(resolve(root, "schema.sql"), "utf8"));
+  db.exec(readFileSync(resolve(root, "grant/schema.sql"), "utf8"));
 } finally {
   db.close();
 }
