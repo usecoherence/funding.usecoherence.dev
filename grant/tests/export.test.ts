@@ -59,3 +59,33 @@ test("export never publishes artifacts without allowlist entry", () => {
     closeTestDb(db, dir);
   }
 });
+
+test("artifacts are attached to the owning grant via its applications", () => {
+  const { db, dir } = createTestDb();
+  try {
+    const grantA = addGrant(db, { slug: "grant-a", name: "Grant A" });
+    const grantB = addGrant(db, { slug: "grant-b", name: "Grant B" });
+    addApplication(db, { grantId: grantA.id });
+    const appB = addApplication(db, { grantId: grantB.id });
+    // Artifact belongs to B's application.
+    const artifact = db
+      .insert(grantApplicationArtifacts)
+      .values({
+        grantApplicationId: appB.id,
+        artifactType: "text",
+        name: "B doc",
+        content: "for B only",
+      })
+      .returning()
+      .get();
+    // Allowlist B's artifact; it must appear only under grant-b.
+    const data = exportWebsiteData(db, { publishedArtifactIds: [artifact.id] });
+    const a = data.grants.find((g) => g.slug === "grant-a")!;
+    const b = data.grants.find((g) => g.slug === "grant-b")!;
+    assert.deepEqual(a.artifacts, []);
+    assert.equal(b.artifacts.length, 1);
+    assert.equal(b.artifacts[0].name, "B doc");
+  } finally {
+    closeTestDb(db, dir);
+  }
+});

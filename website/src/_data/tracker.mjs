@@ -38,28 +38,16 @@ function copyPublishedFiles(data) {
 }
 
 export default function () {
-  try {
-    const data = loadExport();
-    copyPublishedFiles(data);
-    return {
-      items: data.grants,
-      summary: {
-        total: data.stats.totalGrants,
-        applications: data.stats.totalApplications,
-        funded: data.stats.totalFunded,
-        inDiscussion: data.stats.totalInDiscussion,
-      },
-      generatedAt: new Date().toISOString(),
-    };
-  } catch (error) {
-    if (error instanceof Error && error.message.includes("Missing grant database")) {
-      return {
-        error: error.message,
-        items: [],
-        summary: { total: 0, applications: 0, funded: 0, inDiscussion: 0 },
-        generatedAt: new Date().toISOString(),
-      };
-    }
-    throw error;
-  }
+  const data = loadExport();
+  copyPublishedFiles(data);
+  return {
+    items: data.grants,
+    summary: {
+      total: data.stats.totalGrants,
+      applications: data.stats.totalApplications,
+      funded: data.stats.totalFunded,
+      inDiscussion: data.stats.totalInDiscussion,
+    },
+    generatedAt: new Date().toISOString(),
+  };
 }

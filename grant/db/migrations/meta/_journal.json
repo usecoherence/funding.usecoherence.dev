@@ -15,6 +15,13 @@
       "when": 1788974269356,
       "tag": "0001_dashing_power_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788996629433,
+      "tag": "0002_greedy_kitty_pryde",
+      "breakpoints": true
     }
   ]
 }

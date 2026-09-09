@@ -36,4 +36,9 @@ const result = spawnSync(
   { stdio: "inherit" },
 );
 
-process.exit(result.status || 0);
+if (result.error) {
+  console.error(`rsync failed to start: ${result.error.message}`);
+  process.exit(1);
+}
+
+process.exit(result.status ?? 1);

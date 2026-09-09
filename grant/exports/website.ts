@@ -7,6 +7,10 @@ import { grants, grantApplications, grantApplicationArtifacts } from "../db/sche
  */
 const PUBLISHED_ARTIFACT_IDS: number[] = [];
 
+export interface ExportOptions {
+  publishedArtifactIds?: number[];
+}
+
 const ALLOWED_URL_PREFIXES = ["http://", "https://"];
 
 function safeUrl(url: string | null | undefined): string | null {
@@ -50,13 +54,12 @@ export interface WebsiteExport {
   grants: WebsiteGrant[];
 }
 
-export function exportWebsiteData(db: Db = openDb()): WebsiteExport {
+export function exportWebsiteData(db: Db = openDb(), options: ExportOptions = {}): WebsiteExport {
+  const publishedArtifactIds = new Set(options.publishedArtifactIds ?? PUBLISHED_ARTIFACT_IDS);
   try {
     const grantRows = db.select().from(grants).orderBy(grants.priority).all();
     const appRows = db.select().from(grantApplications).all();
     const artifactRows = db.select().from(grantApplicationArtifacts).all();
-
-    const publishedArtifactIds = new Set(PUBLISHED_ARTIFACT_IDS);
 
     const grantsOut: WebsiteGrant[] = grantRows.map((g) => {
       const apps = appRows
@@ -68,8 +71,9 @@ export function exportWebsiteData(db: Db = openDb()): WebsiteExport {
           status: a.status,
           createdAt: a.createdAt,
         }));
+      const appIds = new Set(appRows.filter((a) => a.grantId === g.id).map((a) => a.id));
       const artifacts = artifactRows
-        .filter((a) => a.grantApplicationId === g.id)
+        .filter((a) => appIds.has(a.grantApplicationId))
         .filter((a) => publishedArtifactIds.has(a.id))
         .map((a) => ({
           id: a.id,
