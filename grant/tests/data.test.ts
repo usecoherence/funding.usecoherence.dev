@@ -9,6 +9,7 @@ test("grant and application round-trip persists", () => {
   const { db, dir } = createTestDb();
   try {
     const grant = addGrant(db, {
+      slug: "openai-codex",
       name: "OpenAI Codex",
       programUrl: "https://openai.com/codex",
       priority: 1,
@@ -45,8 +46,8 @@ test("application with unknown grant id is rejected by FK", () => {
 test("invalid priority and status are rejected by CHECK", () => {
   const { db, dir } = createTestDb();
   try {
-    assert.throws(() => addGrant(db, { name: "Bad", priority: 9 }), /CHECK/i);
-    const grant = addGrant(db, { name: "Good" });
+    assert.throws(() => addGrant(db, { slug: "bad", name: "Bad", priority: 9 }), /CHECK/i);
+    const grant = addGrant(db, { slug: "good", name: "Good" });
     assert.throws(
       () => addApplication(db, { grantId: grant.id, status: "bogus" as never }),
       /CHECK/i,
@@ -59,7 +60,7 @@ test("invalid priority and status are rejected by CHECK", () => {
 test("re-running migrations is a no-op", () => {
   const { db, dir } = createTestDb();
   try {
-    const grant = addGrant(db, { name: "Persistent" });
+    const grant = addGrant(db, { slug: "persistent", name: "Persistent" });
     migrate(db, {
       migrationsFolder: new URL("../db/migrations", import.meta.url).pathname,
     });

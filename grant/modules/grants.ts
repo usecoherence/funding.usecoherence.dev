@@ -3,6 +3,7 @@ import { grants } from "../db/schema.js";
 import { eq } from "drizzle-orm";
 
 export interface NewGrant {
+  slug: string;
   name: string;
   programUrl?: string | null;
   priority?: number;
@@ -15,6 +16,7 @@ export function addGrant(db: Db, input: NewGrant) {
   const result = db
     .insert(grants)
     .values({
+      slug: input.slug,
       name: input.name,
       programUrl: input.programUrl ?? null,
       priority: input.priority ?? 3,

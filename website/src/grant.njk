@@ -12,72 +12,51 @@ eleventyComputed:
 <nav class="breadcrumb"><a href="/">Programs</a><span>→</span>{{ grant.name }}</nav>
 <section class="detail-head">
   <div>
-    <p class="eyebrow">{{ grant.provider }}</p>
+    <p class="eyebrow">{{ grant.programUrl }}</p>
     <h1>{{ grant.name }}</h1>
     <div class="badges">
-      <span class="badge priority {{ grant.priority | lower }}">{{ grant.priority }}</span>
+      <span class="badge priority p{{ grant.priority }}">P{{ grant.priority }}</span>
       <span class="badge {{ grant.fit }}">fit: {{ grant.fit }}</span>
       <span class="badge {{ grant.eligibility }}">eligibility: {{ grant.eligibility }}</span>
-      <span class="badge neutral">{{ application.status or "not-started" }}</span>
+      <span class="badge neutral">{{ application.status or "none" }}</span>
     </div>
   </div>
   <div class="quick-links">
-    {% if application.form_url or grant.application_url %}<a class="primary" href="{{ application.form_url or grant.application_url }}">Open form ↗</a>{% endif %}
-    {% if grant.website_url %}<a href="{{ grant.website_url }}">Website ↗</a>{% endif %}
-    {% if grant.source_url %}<a href="{{ grant.source_url }}">Terms/source ↗</a>{% endif %}
-    {% if application.contact_email %}<a href="mailto:{{ application.contact_email }}">Email ↗</a>{% endif %}
+    {% if grant.programUrl %}<a href="{{ grant.programUrl }}">Program ↗</a>{% endif %}
   </div>
 </section>
 
 <section class="detail-grid">
   <article class="panel prose">
     <h2>Application</h2>
+    {% if application %}
     <dl>
-      <dt>Deadline</dt><dd>{{ application.deadline | date }}</dd>
-      <dt>Benefit</dt><dd>{{ grant.benefit or "—" }}</dd>
-      <dt>Geography</dt><dd>{{ grant.geography or "—" }}</dd>
-      <dt>Applicant</dt><dd>{{ grant.applicant_type or "—" }}</dd>
-      <dt>Last checked</dt><dd>{{ grant.last_checked_at | date }}</dd>
-      <dt>Next review</dt><dd>{{ grant.next_review_at | date }}</dd>
+      <dt>Status</dt><dd>{{ application.status }}</dd>
+      <dt>Amount</dt><dd>{% if application.amount %}{{ application.amount }} {{ application.currency }}{% else %}—{% endif %}</dd>
+      <dt>Created</dt><dd>{{ application.createdAt | date }}</dd>
     </dl>
-    <h3>Next action</h3><p>{{ grant.next_action or "—" }}</p>
-    <h3>Current catch</h3><p>{{ grant.blocker or "—" }}</p>
-    <h3>Requirements</h3><p>{{ grant.core_requirements or "—" }}</p>
+    {% else %}<p class="muted">No application yet.</p>{% endif %}
   </article>
 
   <aside class="panel command-card">
     <h2>Agent context</h2>
-    <code>grant show {{ grant.slug }} --json</code>
-    <code>grant questions {{ grant.slug }} --json</code>
-    <code>grant check {{ grant.slug }} --json</code>
-    <code>grant open {{ grant.slug }} form</code>
+    <code>npm run cli -- grants:show {{ grant.slug }}</code>
+    <code>npm run cli -- applications:list</code>
   </aside>
 </section>
 
 <section class="panel">
-  <h2>Questions</h2>
-  {% if application.questions.length %}
-    <div class="questions">
-    {% for q in application.questions %}
-      <article class="question">
-        <div><span class="badge neutral">{{ q.status }}</span><code>{{ q.key }}</code></div>
-        <h3>{{ q.question }}</h3>
-        <pre>{{ q.answer or "No answer yet" }}</pre>
-      </article>
+  <h2>Artifacts</h2>
+  {% if grant.artifacts.length %}
+    <ul class="timeline">
+    {% for artifact in grant.artifacts %}
+      <li>
+        <strong>{{ artifact.artifactType }}</strong>
+        <span>{{ artifact.name or "—" }}</span>
+        {% if artifact.url %}<a href="{{ artifact.url }}">{{ artifact.url }}</a>{% endif %}
+        {% if artifact.content %}<pre>{{ artifact.content }}</pre>{% endif %}
+      </li>
     {% endfor %}
-    </div>
-  {% else %}<p class="muted">No questions yet. Run <code>grant parse {{ grant.slug }}</code>.</p>{% endif %}
-</section>
-
-{% if application.context %}
-<section class="panel prose"><h2>Context</h2><pre class="context">{{ application.context }}</pre></section>
-{% endif %}
-
-<section class="panel">
-  <h2>Timeline</h2>
-  {% if application.events.length %}
-    <ol class="timeline">
-    {% for event in application.events %}<li><time>{{ event.occurred_at | date }}</time><strong>{{ event.kind }}</strong><span>{{ event.subject or event.note }}</span></li>{% endfor %}
-    </ol>
-  {% else %}<p class="muted">No events recorded.</p>{% endif %}
+    </ul>
+  {% else %}<p class="muted">No published artifacts.</p>{% endif %}
 </section>

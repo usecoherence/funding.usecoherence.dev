@@ -4,6 +4,7 @@ export const grants = sqliteTable(
   "grants",
   {
     id: integer("id").primaryKey(),
+    slug: text("slug").notNull().unique(),
     name: text("name").notNull(),
     programUrl: text("program_url"),
     priority: integer("priority").notNull().default(3),
