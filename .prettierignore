@@ -2,3 +2,4 @@ node_modules/
 website/public/
 dist/
 package-lock.json
+grant/db/migrations/

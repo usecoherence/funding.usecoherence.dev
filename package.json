@@ -8,12 +8,13 @@
     "site:build": "npm --prefix website run build",
     "deploy": "npm --prefix website run build && node --import ./deploy/load-env.mjs ./deploy/deploy-pgs.mjs",
     "dns:setup": "node --import ./deploy/load-env.mjs deploy/setup-cloudflare-dns.mjs",
-    "db:init": "node --experimental-strip-types grant/init-db.ts",
     "cli": "tsx grant/cli.ts",
     "check:types": "tsc --noEmit",
     "check:lint": "eslint grant/",
     "check:format": "prettier --check grant/",
-    "check": "npm run check:types && npm run check:lint && npm run check:format"
+    "check": "npm run check:types && npm run check:lint && npm run check:format",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx grant/db/migrate.ts"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
