@@ -36,5 +36,8 @@ Detail pages: https://funding.usecoherence.dev/grants/<slug>/
 ## Notes
 
 - The SQLite database is local-only and never committed (`data/grants.sqlite`).
+- `GRANT_DB_PATH` overrides the database location (default `data/grants.sqlite`).
+- Migrations live in `grant/db/migrations`; `npm run db:generate` creates them
+  from `grant/db/schema.ts`, `npm run db:migrate` applies them.
 - Artifacts are published to the site only via an explicit allowlist in
   `grant/exports/website.ts` (empty by default).
